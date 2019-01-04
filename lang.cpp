@@ -1,4 +1,4 @@
-// модификация 1 ;
+// modification 1, parsing with separator ";" and operators
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -54,7 +54,7 @@ int main(){
 
   for(int i = 0; i < code_list.size(); i++){
     cout << code_list[i] << endl;
-  }
+  } // operability check
 
 
 code.close();
