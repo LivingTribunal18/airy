@@ -45,16 +45,38 @@ int main(){
         word += ch;
       }
   }
-  if(word != ""){
-    code_list.push_back(word);
-  }
+  //if(word != ""){
+    //code_list.push_back(word);
+  //}
 
   code_list.pop_back();
   code_list.pop_back();
 
-  for(int i = 0; i < code_list.size(); i++){
-    cout << code_list[i] << endl;
-  } // operability check
+//  for(int i = 0; i < code_list.size(); i++){
+  //  cout << code_list[i] << endl;
+  //}// operability check
+
+  vector<string> transfer;
+
+  string id = "Identifier";
+  string lit = "Literal";
+  string op = "Operator";
+
+    for(int i = 0; i < code_list.size(); i++){
+      cout << code_list[i] << endl;
+      if (code_list[i] == operators[0]) {
+          transfer[i].push_back(op);
+      }else if (code_list[i] != operators[0]) {
+        for (int j = 0; j < code_list[i].length(); j++) {
+            if ((code_list[i][j] >= 0) && (code_list[i][j] <= 10)) {
+              transfer[i].push_back(lit);
+            }
+        }
+      }else {
+        transfer[i].push_back(id);
+      }
+
+    }
 
 
 code.close();
