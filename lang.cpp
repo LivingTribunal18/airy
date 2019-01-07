@@ -59,26 +59,23 @@ int main(){
 */
 
   vector<string> transfer;
-  string id = "Identifier";
-  string lit = "Literal";
-  string op = "Operator";
 
   for(int i = 0; i < code_list.size(); i++){
       if (code_list[i] == ":") {
-          transfer.push_back(op);
+          transfer.push_back("Operator");
       }else if (code_list[i] == ";" || code_list[i] == "!" || code_list[i] == "close") {
           break;
       }
           for (int j = 0; j < code_list[i].length(); j++) {
-             if (code_list[i] >= "0" && code_list[i] <= "9"){
-               transfer.push_back(lit);
+             if (code_list[i] >= "0" && code_list[i] <= "9999"){
+               transfer.push_back("Literal");
                break;
             }else {
                break;
             }
           }
       if (code_list[i] != ":") {
-          transfer.push_back(id);
+          transfer.push_back("Identifier");
       }
   }
 
