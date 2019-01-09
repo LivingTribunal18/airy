@@ -4,6 +4,7 @@
 #include <string>
 #include <stdio.h>
 #include <vector>
+#include<bits/stdc++.h>
 #include <fstream>
 
 using namespace std;
@@ -26,6 +27,7 @@ bool isSeparator(char list){
   }
   return false;
 }
+string keywords[] = {"close", "if", "else", "elseif"};
 
 
 int main(){
@@ -45,16 +47,45 @@ int main(){
         word += ch;
       }
   }
-  if(word != ""){
-    code_list.push_back(word);
-  }
+
 
   code_list.pop_back();
   code_list.pop_back();
+
+/*  <=== Operability Check of Parser === >
+ for(int i = 0; i < code_list.size(); i++){
+   cout << code_list[i] << endl;
+  }
+*/
+  vector <vector<string> > parsing;
+  vector<string> transfer;
 
   for(int i = 0; i < code_list.size(); i++){
-    cout << code_list[i] << endl;
-  } // operability check
+      if (code_list[i] == ":") {
+          transfer.push_back("Operator");
+      }else if (code_list[i] == ";" || code_list[i] == "!" || code_list[i] == "close") {
+          break;
+      }
+          for (int j = 0; j < code_list[i].length(); j++) {
+             if (code_list[i]>= "0" && code_list[i] <= "9999"){
+               transfer.push_back("Literal");
+               break;
+            }
+          }
+      if (code_list[i] != ":") {
+        transfer.push_back("Identifier");
+      }
+  }
+
+transfer.pop_back();
+parsing.push_back(transfer);
+
+   //<=== Operability Check of Translator ===>
+   for(int i = 0; i < parsing.size(); i++){
+        for (int j = 0; j < transfer.size(); j++) {
+          cout << parsing[i][j] << "\n";
+        }
+    }
 
 
 code.close();
