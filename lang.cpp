@@ -57,7 +57,7 @@ int main(){
    cout << code_list[i] << endl;
   }
 */
-
+  vector <vector<string> > parsing;
   vector<string> transfer;
 
   for(int i = 0; i < code_list.size(); i++){
@@ -67,25 +67,26 @@ int main(){
           break;
       }
           for (int j = 0; j < code_list[i].length(); j++) {
-             if (code_list[i] >= "0" && code_list[i] <= "9999"){
+             if (code_list[i]>= "0" && code_list[i] <= "9999"){
                transfer.push_back("Literal");
-               break;
-            }else {
                break;
             }
           }
       if (code_list[i] != ":") {
-          transfer.push_back("Identifier");
+        transfer.push_back("Identifier");
       }
   }
 
 transfer.pop_back();
+parsing.push_back(transfer);
 
-  /* <=== Operability Check of Translator ===>
-   for(int i = 0; i < transfer.size(); i++){
-      cout << transfer[i] << endl;
+   //<=== Operability Check of Translator ===>
+   for(int i = 0; i < parsing.size(); i++){
+        for (int j = 0; j < transfer.size(); j++) {
+          cout << parsing[i][j] << "\n";
+        }
     }
-*/
+
 
 code.close();
 
