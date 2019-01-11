@@ -8,6 +8,11 @@
 
 using namespace std;
 
+vector<vector<string> > code_list;
+vector<vector<string> > code_tokens;
+vector<string> tmp_list;
+vector<string> tmp_tokens;
+
 char operators[] = {':'};
 bool isOperator(char word){
   for (int i = 0; i < sizeof(operators)/sizeof(char); i++) {
@@ -38,54 +43,57 @@ bool isKeyword(string word){
   return false;
 }
 
+bool isLiteral(string word){
+  int isDigit = 0;
+  int j=0;
+  while((j<word.length()) && (isDigit == 0)){
+    isDigit = isdigit(word[j]);
+    j++;
+  }
+  return isDigit;
+}
+
+void push(string word){
+  if(word != ""){
+    tmp_list.push_back(word);
+    if(isKeyword(word)){
+      tmp_tokens.push_back("Keyword");
+     }else if(isLiteral(word)){
+       tmp_tokens.push_back("Literal");
+    }else{
+      tmp_tokens.push_back("Identifier");
+    }
+  }
+}
+
 int main(){
   FILE *code;
   if((code=fopen("1.txt", "r")) == NULL) {
     printf ("Cannot open file.\n");
     return 1;
   }
-  vector<vector<string> > code_list;
-  vector<vector<string> > code_tokens;
-  vector<string> tmp_list;
-  vector<string> tmp_tokens;
-  string word = "";
 
   char ch;
+  string word = "";
   while((ch=getc(code)) != EOF){
     if(ch == ' '){
-      if(word != ""){
-        tmp_list.push_back(word);
-        if(isKeyword(word)){
-          tmp_tokens.push_back("Keyword");
-        // }else if(isLiteral(word)){
-        //   tmp_tokens.push_back("Literal");
-        }
-        word = "";
-      }
+      push(word);
+      word = "";
     }else if(isOperator(ch)){
-      if(word != ""){
-        tmp_list.push_back(word);
-      }
+      push(word);
       word = ch;
       tmp_list.push_back(word);
-      tmp_tokens.push_back("Operator")
+      tmp_tokens.push_back("Operator");
       word = "";
     }else if(isSeparator(ch)){
-      if(word != ""){
-        tmp.push_back(word);
-      }
-      code_list.push_back(tmp);
-      tmp.clear(); word = "";
+      push(word);
+      code_list.push_back(tmp_list);
+      code_tokens.push_back(tmp_tokens);
+      word = "";
+      tmp_list.clear(); tmp_tokens.clear();
     }else if(ch != '\n'){
       word += ch;
     }
-  }
-
-  for(int i = 0; i<code_list.size(); i++){
-    for(int j =0; j<code_list[i].size(); j++){
-      cout << code_list[i][j] << ' ';
-    }
-    cout << endl;
   }
 
   fclose (code);
