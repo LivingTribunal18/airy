@@ -1,13 +1,17 @@
-// modification 1, parsing with separator ";" and operators
 #include <iostream>
 #include <cstdlib>
 #include <string>
 #include <stdio.h>
+#include <stdlib.h>
 #include <vector>
-#include<bits/stdc++.h>
 #include <fstream>
 
 using namespace std;
+
+vector<vector<string> > code_list;
+vector<vector<string> > code_tokens;
+vector<string> tmp_list;
+vector<string> tmp_tokens;
 
 char operators[] = {':'};
 bool isOperator(char word){
@@ -18,7 +22,8 @@ bool isOperator(char word){
   }
   return false;
 }
-char separators[] = {';', '!'};
+
+char separators[] = {';'};
 bool isSeparator(char list){
   for (int i = 0; i < sizeof(separators)/sizeof(char); i++) {
     if (list == separators[i]){
@@ -27,68 +32,70 @@ bool isSeparator(char list){
   }
   return false;
 }
-string keywords[] = {"close", "if", "else", "elseif"};
 
+string keywords[] = {"if", "else", "elseif"};
+bool isKeyword(string word){
+  for(int i = 0; i < sizeof(keywords)/sizeof(char); i++) {
+    if (word == keywords[i]){
+      return true;
+    }
+  }
+  return false;
+}
+
+bool isLiteral(string word){
+  int isDigit = 0;
+  int j=0;
+  while((j<word.length()) && (isDigit == 0)){
+    isDigit = isdigit(word[j]);
+    j++;
+  }
+  return isDigit;
+}
+
+void push(string word){
+  if(word != ""){
+    tmp_list.push_back(word);
+    if(isKeyword(word)){
+      tmp_tokens.push_back("Keyword");
+     }else if(isLiteral(word)){
+       tmp_tokens.push_back("Literal");
+    }else{
+      tmp_tokens.push_back("Identifier");
+    }
+  }
+}
 
 int main(){
-  ifstream code("1.txt");
-  vector<string> code_list;
-  string word = "";
+  FILE *code;
+  if((code=fopen("1.txt", "r")) == NULL) {
+    printf ("Cannot open file.\n");
+    return 1;
+  }
 
   char ch;
-  while (!code.eof()) {
-      code >> ch;
-      if((isOperator(ch)) || (isSeparator(ch))){
-        code_list.push_back(word);
-        word = ch;
-        code_list.push_back(word);
-        word = "";
-      }else{
-        word += ch;
-      }
-  }
-
-
-  code_list.pop_back();
-  code_list.pop_back();
-
-/*  <=== Operability Check of Parser === >
- for(int i = 0; i < code_list.size(); i++){
-   cout << code_list[i] << endl;
-  }
-*/
-  vector <vector<string> > parsing;
-  vector<string> transfer;
-
-  for(int i = 0; i < code_list.size(); i++){
-      if (code_list[i] == ":") {
-          transfer.push_back("Operator");
-      }else if (code_list[i] == ";" || code_list[i] == "!" || code_list[i] == "close") {
-          break;
-      }
-          for (int j = 0; j < code_list[i].length(); j++) {
-             if (code_list[i]>= "0" && code_list[i] <= "9999"){
-               transfer.push_back("Literal");
-               break;
-            }
-          }
-      if (code_list[i] != ":") {
-        transfer.push_back("Identifier");
-      }
-  }
-
-transfer.pop_back();
-parsing.push_back(transfer);
-
-   //<=== Operability Check of Translator ===>
-   for(int i = 0; i < parsing.size(); i++){
-        for (int j = 0; j < transfer.size(); j++) {
-          cout << parsing[i][j] << "\n";
-        }
+  string word = "";
+  while((ch=getc(code)) != EOF){
+    if(ch == ' '){
+      push(word);
+      word = "";
+    }else if(isOperator(ch)){
+      push(word);
+      word = ch;
+      tmp_list.push_back(word);
+      tmp_tokens.push_back("Operator");
+      word = "";
+    }else if(isSeparator(ch)){
+      push(word);
+      code_list.push_back(tmp_list);
+      code_tokens.push_back(tmp_tokens);
+      word = "";
+      tmp_list.clear(); tmp_tokens.clear();
+    }else if(ch != '\n'){
+      word += ch;
     }
+  }
 
-
-code.close();
-
-return 0;
+  fclose (code);
+  return 0;
 }
