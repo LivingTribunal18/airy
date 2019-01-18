@@ -100,8 +100,6 @@ int main(){
   }
 
 
-
-
 vector<vector<string> > vm_comands;
 vector<string> vm_tmp;
 
@@ -140,6 +138,7 @@ for (int i = 0; i < s.size(); i++) {
   cout << "\n";
 }
 
+  
   fclose (code);
   return 0;
 }
