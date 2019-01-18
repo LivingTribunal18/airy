@@ -2,11 +2,13 @@
 
 ### Syntax Description of our *Language*
 
-<**identifier**> ::= "*a*" | "*b*" | ... | "*z*".
+<**identifier**> ::= "*a*" | "*b*" | ... | "*z*"
 
-<**literal**> ::= "0" | "1" | ... | "9" .
+<**literal**> ::= "0" | "1" | ... | "9" 
 
-<**expression**> ::= <**sum**> | <**identifier**> ":" <**literal**>.
+<**expression**> ::= <**sum**> | <**identifier**> ":" <**literal**>
 
-<**sum**> ::= <**identifier**> "+" <**literal**> | <**identifier**> "+" <**identifier>**> | <**literal**> "+" <**literal**>.
+<**sum**> ::= <**identifier**> "+" <**literal**> | <**identifier**> "+" <**identifier>**> | <**literal**> "+" <**literal**>
+
+<**initialization**> ::= <**identifier**> ":" <**literal**>
 
