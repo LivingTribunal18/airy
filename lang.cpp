@@ -7,7 +7,6 @@
 #include <fstream>
 #include <algorithm>
 
-
 using namespace std;
 
 vector<vector<string> > code_list;
@@ -63,8 +62,16 @@ void push(string word){
       tmp_tokens.push_back("Keyword");
      }else if(isLiteral(word)){
        tmp_tokens.push_back("Literal");
-    }else{
+       s.push_back("PUSH " + word);
+       reverse(s.begin(), s.end());
+          for (int i = 0; i < s.size(); i++) {
+            cout << s[i];
+            cout << "\n";
+          }
+       s.clear();
+     }else{
       tmp_tokens.push_back("Identifier");
+       s.push_back("STORE " + word);
     }
   }
 }
@@ -100,45 +107,13 @@ int main(){
   }
 
 
-vector<vector<string> > vm_comands;
-vector<string> vm_tmp;
 
-vm_tmp.push_back("Identifier");
-vm_tmp.push_back("Operator");
-vm_tmp.push_back("Literal");
-vm_comands.push_back(vm_tmp);
 
-int counter = 0;
-
-for(int i = 0; i < code_tokens.size(); i++){
-  for(int j = 0; j < vm_comands.size(); j++){
-   if (code_tokens[i] == vm_comands[j]) {
-       counter++;
-   }
-    if (counter == vm_comands.size()) {
-       for (int i = 0; i < vm_comands.size(); i++) {
-         for (int j = 0; j < vm_comands[i].size(); j++) {
-           for (int k = 0; k < code_list.size(); k++) {
-             for (int l = 0; l < code_list[k].size(); l++) {
-                if (vm_comands[i][j] == "Operator" && code_list[k][l] == ":") {
-                    s.push_back("PUSH " + code_list[k][l+1]);
-                    s.push_back("STORE " + code_list[k][l-1]);
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 s.push_back("HALT");
-
 for (int i = 0; i < s.size(); i++) {
   cout << s[i];
-  cout << "\n";
 }
 
-  
   fclose (code);
   return 0;
 }
