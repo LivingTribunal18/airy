@@ -6,6 +6,8 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <bits/stdc++.h>
+
 
 using namespace std;
 
@@ -61,17 +63,9 @@ void push(string word){
     if(isKeyword(word)){
       tmp_tokens.push_back("Keyword");
      }else if(isLiteral(word)){
-       tmp_tokens.push_back("Literal");
-       s.push_back("PUSH " + word);
-       reverse(s.begin(), s.end());
-          for (int i = 0; i < s.size(); i++) {
-            cout << s[i];
-            cout << "\n";
-          }
-       s.clear();
-     }else{
+      tmp_tokens.push_back("Literal");
+    }else{
       tmp_tokens.push_back("Identifier");
-       s.push_back("STORE " + word);
     }
   }
 }
@@ -82,6 +76,7 @@ int main(){
     printf ("Cannot open file.\n");
     return 1;
   }
+
 
   char ch;
   string word = "";
@@ -108,12 +103,41 @@ int main(){
 
 
 
+  ofstream vm_code("2.txt");
 
-s.push_back("HALT");
-for (int i = 0; i < s.size(); i++) {
-  cout << s[i];
+  if (!vm_code.is_open()){
+      cout << "Cannot write in file \n";
+      return 2;
+  }
+
+vector<vector<string> > vm_comands;
+vector<string> vm_tmp;
+
+vm_tmp.push_back("Identifier");
+vm_tmp.push_back("Operator");
+vm_tmp.push_back("Literal");
+vm_comands.push_back(vm_tmp);
+
+int counter = 0;
+string tok = "Literal"; string tok1 = "Identifier";
+
+for(int i = 0; i < code_tokens.size(); i++){
+   for(int j = 0; j < vm_comands.size(); j++){
+      if (code_tokens[i] == vm_comands[j]) {
+         counter++;
+      }
+      if (counter >= vm_comands.size()) {
+           int it = find(code_tokens[i].begin(), code_tokens[i].end(), tok) - code_tokens[i].begin();
+           int it1 = find(code_tokens[i].begin(), code_tokens[i].end(), tok1) - code_tokens[i].begin();
+           vm_code << "PUSH " << code_list[i][it] << "\n";
+           vm_code << "STORE " << code_list[i][it1] << "\n";
+      }
+   }
 }
+  vm_code << "HALT \n";
 
+
+  vm_code.close();
   fclose (code);
   return 0;
 }
