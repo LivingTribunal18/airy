@@ -103,7 +103,7 @@ int main(){
 
 
 
-  ofstream vm_code("2.txt");
+  ofstream vm_code("2.txt", ios::binary);
 
   if (!vm_code.is_open()){
       cout << "Cannot write in file \n";
@@ -113,28 +113,34 @@ int main(){
 vector<vector<string> > vm_comands;
 vector<string> vm_tmp;
 
-vm_tmp.push_back("Identifier");
-vm_tmp.push_back("Operator");
-vm_tmp.push_back("Literal");
-vm_comands.push_back(vm_tmp);
+vm_tmp.push_back("Identifier"); vm_tmp.push_back("Operator");
+vm_tmp.push_back("Literal");    vm_comands.push_back(vm_tmp);
 
-int counter = 0;
-string tok = "Literal"; string tok1 = "Identifier";
+int push_byte = 0x03;
+int store_byte = 0x02;
+int halt = 0x00;
+
+vector<int> counter(5, 0);
 
 for(int i = 0; i < code_tokens.size(); i++){
    for(int j = 0; j < vm_comands.size(); j++){
       if (code_tokens[i] == vm_comands[j]) {
-         counter++;
+         counter[0]++;
       }
-      if (counter >= vm_comands.size()) {
-           int it = find(code_tokens[i].begin(), code_tokens[i].end(), tok) - code_tokens[i].begin();
-           int it1 = find(code_tokens[i].begin(), code_tokens[i].end(), tok1) - code_tokens[i].begin();
-           vm_code << "PUSH " << code_list[i][it] << "\n";
-           vm_code << "STORE " << code_list[i][it1] << "\n";
+      if (counter[0] >= 1) {
+           int lit_it = find(code_tokens[i].begin(), code_tokens[i].end(), "Literal") - code_tokens[i].begin();
+           int id_it = find(code_tokens[i].begin(), code_tokens[i].end(), "Identifier") - code_tokens[i].begin();
+           vm_code.write((char*)&push_byte, sizeof(push_byte));
+           vm_code.write((char*)&code_list[i][lit_it], sizeof(code_list[i][lit_it]));
+           vm_code.write((char*)&store_byte, sizeof(store_byte));
+           vm_code.write((char*)&code_list[i][id_it], sizeof(code_list[i][id_it]));
       }
    }
 }
-  vm_code << "HALT \n";
+
+vm_code.write((char*)&halt, sizeof(halt));
+
+
 
 
   vm_code.close();
