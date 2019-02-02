@@ -133,10 +133,7 @@ int main(){
   }
 
 
-
   ofstream vm_code("2.txt", ios::binary);
-
-
   if (!vm_code.is_open()){
       cout << "Cannot write in file \n";
       return 2;
@@ -145,12 +142,14 @@ int main(){
 vector<vector<string> > vm_comands;
 vector<string> vm_tmp;
 
-vm_tmp.push_back("Identifier"); vm_tmp.push_back("Operator");
-vm_tmp.push_back("Literal");    vm_comands.push_back(vm_tmp);
+vm_tmp.push_back("Identifier");
+vm_tmp.push_back("Operator");
+vm_tmp.push_back("Literal");    
+vm_comands.push_back(vm_tmp);
 
-int push_byte = 0x03;
-int store_byte = 0x02;
-int halt = 0x00;
+char push_byte = 0x03;
+char store_byte = 0x02;
+char halt = 0x00;
 
 vector<int> counter(5, 0);
 
