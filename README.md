@@ -11,5 +11,3 @@
 <**sum**> ::= <**identifier**> "+" <**literal**> | <**identifier**> "+" <**identifier>**> | <**literal**> "+" <**literal**>
 
 <**initialization**> ::= <**identifier**> ":" <**literal**>
-
-
